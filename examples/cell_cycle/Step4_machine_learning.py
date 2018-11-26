@@ -14,8 +14,8 @@ from sklearn.feature_selection import VarianceThreshold
 import matplotlib.pyplot as plt
 from sklearn import preprocessing
 
-working_directory = '/Users/holgerh/Dropbox/holger/work/Academia/presenting/dissemination_workshops/machine-learning-IFC_tutorial/examples/cell_cycle'
-os.chdir(working_directory)
+# Define the location of the input data and where to store the ourput
+# Here, we just use the subsequent directories
 input_directory = "Step3_AllData/"
 output_directory = "Step4_ML_output/"
 
@@ -37,6 +37,8 @@ brightfield = pandas.read_csv(os.path.join(input_directory, brightfield_filename
 darkfield = pandas.read_csv(os.path.join(input_directory, darkfield_filename), sep='\t',)
 
 #%% Preprocessing ###
+
+print("Preprocessing")
 
 #exclude features
 exclude_featuresBF = [0,1,3,4,7,17,19]
@@ -90,8 +92,7 @@ data = preprocessing.scale(data, axis=0)
 data = pandas.DataFrame(data)
 data.columns = all_features_names
 
-# remove highly correlated features
-# skip this for now
+# remove highly correlated features could be also incorporated here for further dimensional reduction
 
 ### plot function ###
 def plot(classifier_name, cm_diag):
@@ -109,6 +110,8 @@ def plot(classifier_name, cm_diag):
     plt_name = classifier_name + '_plt.png'
     plt.savefig(os.path.join(output_directory, plt_name))
     plt.clf()
+
+print("Start Machine Learning")
 
 #%% Machine Learning ###
 names_classifiers = []
@@ -157,3 +160,5 @@ for name, classifier in names_classifiers:
             for k in np.arange(0,20):
                 file.write("%s.  %s, %s\n" % (k+1, data.columns[sorted_idx[k]], feature_importance[sorted_idx[k]]))
             file.close()
+
+print("Done")
